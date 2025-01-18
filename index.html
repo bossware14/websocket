@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Socket.IO</title>
+    <script src="https://unpkg.com/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script>
+        var socket = io();
+        document.addEventListener('DOMContentLoaded', (event) => {
+            socket.on('connect', function() {
+                socket.send('connect');
+            });
+            socket.on('message', function(msg) {
+                var p = document.createElement('p');
+                p.innerText = JSON.stringify(msg);
+                document.getElementById('status').innerHTML = JSON.stringify(msg);
+                //document.getElementById('status').appendChild(p);
+            });
+        });
+
+function res_id(id,str){
+   document.getElementById(id).innerHTML = str;
+}
+
+function CheckData(){
+var data = {}
+data.status = 'message';
+data.key = 'start';
+data.value = 1;
+socket.send(JSON.stringify(data));
+}
+
+function sendMsg(){
+var data = {} 
+data.status = 'update';
+data.key = 'msg';
+data.value = $('#msg').val();
+socket.send(JSON.stringify(data));
+}
+
+
+function sendAction(){
+var data = {} 
+data.status = 'update';
+data.key = 'action';
+data.value = $('#action').val();
+socket.send(JSON.stringify(data));
+}
+
+function LoginPlayer(id,val){
+var data = {} 
+data.status = 'update';
+data.key = id;
+data.value = val;
+socket.send(JSON.stringify(data));
+}
+
+</script>
+</head>
+<body>
+<h1>Socket.IO</h1>
+<input id="msg" value="" type="text">
+<button onclick="sendMsg()">Msg</button>
+<br>
+<input id="action" value="" type="text">
+<button onclick="sendAction()">Action</button>
+<br>
+<button class="btn btn-primary" onclick="CheckData()">Check</button>
+<br>
+
+<button onclick="LoginPlayer('player1','P1')">Player1</button>
+
+<button onclick="LoginPlayer('player2','P2')">Player2</button>
+
+<br>
+<code id="status"></code>
+<div id="demo"></div>
+<button onclick="getLocation()">Try It</button>
+<script>
+const x = document.getElementById("demo");
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function showPosition(position) {
+  x.innerHTML = "Latitude: " + position.coords.latitude +
+  "<br>Longitude: " + position.coords.longitude;
+}
+</script>
+</body>
+</html>
