@@ -10,13 +10,26 @@ import signal
 import json
 from datetime import datetime, timezone, timedelta
 import socket
+import RPi.GPIO as GPIO
 
-#    pip install flask flask-socketio gpiod
-#    pip install gunicorn
+
+GP1 = 17
+GP2 = 22
+GP3 = 23
+GP4 = 27
+
 app = Flask(__name__,template_folder="")
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
 CORS(app)
+
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+
+#GPIO.setup(GP1,GPIO.IN)
+#GPIO.setup(GP2,GPIO.IN)
+#GPIO.setup(GP3,GPIO.IN)
+#GPIO.setup(GP4,GPIO.IN)
 
 if os.path.isfile('data.json'):
     with open('data.json', 'r') as f:
@@ -25,7 +38,7 @@ else:
     json_data = {}
     with open('data.json', 'w') as f:
       json.dump(json_data, f) 
- 
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -70,6 +83,13 @@ def handleMessage(msg):
        res = json.loads(msg)
        print(res)
        if res["status"] == 'message':
+          return send(update_data(json_data), broadcast=True)
+       if res["status"] == 'start':
+          if res['data'] == True :
+             GPIO.setup(int(res['value']),GPIO.OUT)
+          if res['data'] == False :
+             GPIO.setup(int(res['value']),GPIO.IN)
+
           return send(update_data(json_data), broadcast=True)
 
        if res["status"] == 'update':
