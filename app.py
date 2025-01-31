@@ -26,18 +26,15 @@ CORS(app)
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
-#GPIO.setup(GP1,GPIO.IN)
-#GPIO.setup(GP2,GPIO.IN)
-#GPIO.setup(GP3,GPIO.IN)
-#GPIO.setup(GP4,GPIO.IN)
-
 if os.path.isfile('data.json'):
     with open('data.json', 'r') as f:
       json_data = json.load(f)
 else:
-    json_data = {}
+    json_data = {"data":{"17":False,"22":False,"23":False,"27":False}}
     with open('data.json', 'w') as f:
       json.dump(json_data, f) 
+
+
 
 @app.route('/')
 def index():
@@ -89,7 +86,7 @@ def handleMessage(msg):
              GPIO.setup(int(res['value']),GPIO.OUT)
           if res['data'] == False :
              GPIO.setup(int(res['value']),GPIO.IN)
-
+          json_data["data"][str(res['value'])] = res["data"]
           return send(update_data(json_data), broadcast=True)
 
        if res["status"] == 'update':
@@ -104,4 +101,3 @@ def error_handler(e):
 
 if __name__ == '__main__':
     socketio.run(app,host="0.0.0.0",port="5000", debug=True)
-    #socketio.run(app,host="0.0.0.0",port="5000", debug=True,ssl_context=('cert.pem', 'key.pem'))
