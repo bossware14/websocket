@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+l<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flask</title>
+    <title>GPIO</title>
     <script src="https://unpkg.com/jquery/dist/jquery.min.js"></script>
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script>
@@ -15,8 +15,11 @@
             socket.on('message', function(msg) {
                 var p = document.createElement('p');
                 p.innerText = JSON.stringify(msg);
-                document.getElementById('status').innerHTML = JSON.stringify(msg);
-                //document.getElementById('status').appendChild(p);
+                console.log(msg)
+                $('#17').attr("checked",msg.data[17]);
+                $('#22').attr("checked",msg.data[22])
+                $('#23').attr("checked",msg.data[23])
+                $('#27').attr("checked",msg.data[27])
             });
         });
 
@@ -38,22 +41,6 @@
             data.key = 'gpio';
             data.value = id;
             data.data = app;
-            socket.send(JSON.stringify(data));
-        }
-
-        function sendAction() {
-            var data = {}
-            data.status = 'update';
-            data.key = 'action';
-            data.value = $('#action').val();
-            socket.send(JSON.stringify(data));
-        }
-
-        function LoginPlayer(id, val) {
-            var data = {}
-            data.status = 'update';
-            data.key = id;
-            data.value = val;
             socket.send(JSON.stringify(data));
         }
 
@@ -113,7 +100,7 @@
     <div>
     <h1>GPIO-17</h1>
     <label class="switch">
-        <input type="checkbox" onchange="toggleCheckbox(17,this.checked)">
+        <input type="checkbox" id="17" onchange="toggleCheckbox(17,this.checked)">
         <span class="slider"></span>
     </label>
     </div>
@@ -121,7 +108,7 @@
     <div>
     <h1>GPIO-22</h1>
     <label class="switch">
-        <input type="checkbox" onchange="toggleCheckbox(22,this.checked)">
+        <input type="checkbox" id="22" onchange="toggleCheckbox(22,this.checked)">
         <span class="slider"></span>
     </label>
     </div>
@@ -129,7 +116,7 @@
     <div>
     <h1>GPIO-23</h1>
     <label class="switch">
-        <input type="checkbox" onchange="toggleCheckbox(23,this.checked)">
+        <input type="checkbox" id="23" onchange="toggleCheckbox(23,this.checked)">
         <span class="slider"></span>
     </label>
     </div>
@@ -137,7 +124,7 @@
     <div>
     <h1>GPIO-27</h1>
     <label class="switch">
-        <input type="checkbox" onchange="toggleCheckbox(27,this.checked)">
+        <input type="checkbox" id="27" onchange="toggleCheckbox(27,this.checked)">
         <span class="slider"></span>
     </label>
     </div>
