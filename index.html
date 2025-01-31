@@ -1,4 +1,4 @@
-l<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -43,7 +43,13 @@ l<!DOCTYPE html>
             data.data = app;
             socket.send(JSON.stringify(data));
         }
-
+        function TM1637() {
+            var data = {}
+            data.status = 'tm1637';
+            data.key = 'tm1637';
+            data.value = $('#tm1637').val();
+            socket.send(JSON.stringify(data));
+        }
     </script>
 
     <style>
@@ -98,15 +104,14 @@ l<!DOCTYPE html>
 </head>
 <body>
     <div>
-    <h1>GPIO-17</h1>
+    <h4>GPIO-17</h4>
     <label class="switch">
         <input type="checkbox" id="17" onchange="toggleCheckbox(17,this.checked)">
         <span class="slider"></span>
     </label>
     </div>
-
     <div>
-    <h1>GPIO-22</h1>
+    <h4>GPIO-22</h4>
     <label class="switch">
         <input type="checkbox" id="22" onchange="toggleCheckbox(22,this.checked)">
         <span class="slider"></span>
@@ -114,7 +119,7 @@ l<!DOCTYPE html>
     </div>
 
     <div>
-    <h1>GPIO-23</h1>
+    <h4>GPIO-23</h4>
     <label class="switch">
         <input type="checkbox" id="23" onchange="toggleCheckbox(23,this.checked)">
         <span class="slider"></span>
@@ -122,13 +127,18 @@ l<!DOCTYPE html>
     </div>
 
     <div>
-    <h1>GPIO-27</h1>
+    <h4>GPIO-27</h4>
     <label class="switch">
         <input type="checkbox" id="27" onchange="toggleCheckbox(27,this.checked)">
         <span class="slider"></span>
     </label>
     </div>
-
+<br>
+<div>
+    <h4>TM1637</h4>
+    <input id="tm1637" type="text" value="" maxlength="4">
+    <button onclick="TM1637()">OK</button>
+</div>
 
 </body>
 </html>
